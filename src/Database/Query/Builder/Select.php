@@ -446,6 +446,8 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	public function resetSelect()
 	{
 		$this->_select = array();
+		
+		return $this;
 	}
 
 } // End Database_Query_Select
