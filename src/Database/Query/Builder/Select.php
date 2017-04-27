@@ -74,7 +74,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	 * @param   mixed  $columns  column name or array($column, $alias) or object
 	 * @return  $this
 	 */
-	public function select($columns = NULL)
+	public function select($columns = NULL, )
 	{
 		$columns = func_get_args();
 
@@ -441,6 +441,11 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 		$this->_sql = NULL;
 
 		return $this;
+	}
+	
+	public function resetSelect()
+	{
+		$this->_select = array();
 	}
 
 } // End Database_Query_Select
