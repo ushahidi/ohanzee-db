@@ -450,4 +450,11 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 		return $this;
 	}
 
+	public function resetOrderBy()
+	{
+		$this->_order_by = array();
+
+		return $this;
+	}
+
 } // End Database_Query_Select
