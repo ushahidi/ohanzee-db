@@ -2,18 +2,13 @@
 
 class MysqliTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        Dotenv::load(realpath(__DIR__ . '/../../'));
-    }
-
     private function getEnvConfig()
     {
         $config = [
-            'hostname' => getenv('PHPUNIT_TEST_HOSTNAME'),
-            'database' => getenv('PHPUNIT_TEST_DATABASE'),
-            'username' => getenv('PHPUNIT_TEST_USERNAME'),
-            'password' => getenv('PHPUNIT_TEST_PASSWORD'),
+            'hostname' => getenv('DB_HOSTNAME'),
+            'database' => getenv('DB_DATABASE'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
         ];
 
         return array_filter($config);
@@ -43,6 +38,6 @@ class MysqliTest extends PHPUnit_Framework_TestCase
     {
         $db = new Database_MySQLi($name, $config);
 
-        $this->assertEquals(true, $db->connect());
+        $this->assertEquals(null, $db->connect());
     }
 }
