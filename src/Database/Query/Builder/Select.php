@@ -447,5 +447,19 @@ class Select extends Where {
 
 		return $this;
 	}
+	
+	public function resetSelect()
+	{
+		$this->_select = array();
+		
+		return $this;
+	}
+
+	public function resetOrderBy()
+	{
+		$this->_order_by = array();
+
+		return $this;
+	}
 
 } // End Database_Query_Select
