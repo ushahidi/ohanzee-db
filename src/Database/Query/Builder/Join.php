@@ -8,7 +8,12 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_Query_Builder_Join extends Database_Query_Builder {
+namespace Ohanzee\Database\Query\Builder;
+
+use Ohanzee\Database;
+use Ohanzee\Database\Query\Builder;
+
+class Join extends Builder {
 
 	// Type of JOIN
 	protected $_type;
