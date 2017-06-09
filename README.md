@@ -8,7 +8,7 @@ Many were originally part of the Kohana PHP Framework.
 
 ```
 composer install --dev
-phpunit --bootstrap=vendor/autoload.php tests
+phpunit
 ```
 
 The default database connection details are:
@@ -18,20 +18,12 @@ The default database connection details are:
 - username: ohanzee
 - password: (empty)
 
-These values can be modified by creating a `.env` file in the root of the project:
+These values can be modified by copying `phpunit.xml.dist` to `phpunit.xml` in the root of the project and modifying the env vars:
 
-```ini
-PHPUNIT_TEST_HOSTNAME=server
-PHPUNIT_TEST_DATABASE=testing
-PHPUNIT_TEST_USERNAME=jane
-PHPUNIT_TEST_PASSWORD=likesblue
+```xml
+<env name="DB_HOSTNAME" value="server"/>
+<env name="DB_DATABASE" value="testing"/>
+<env name="DB_USERNAME" value="jane"/>
+<env name="DB_PASSWORD" value="likesblue"/>
 ```
 
-The `.env` file is a standard ini file and will be loaded using [dotenv](https://github.com/vlucas/phpdotenv).
-
-Any of the parameters can also be passed directly on the commandline:
-
-```
-PHPUNIT_TEST_USERNAME=joe PHPUNIT_TEST_PASSWORD=likesgreen \
-  phpunit --bootstrap=vendor/autoload.php tests
-```
