@@ -1,6 +1,8 @@
 <?php
 
-class MysqliTest extends PHPUnit_Framework_TestCase
+namespace Tests;
+
+class MysqliTest extends \PHPUnit_Framework_TestCase
 {
     private function getEnvConfig()
     {
@@ -36,7 +38,7 @@ class MysqliTest extends PHPUnit_Framework_TestCase
      */
     public function testCanConnect($name, $config)
     {
-        $db = new Database\MySQLi($name, $config);
+        $db = new \Ohanzee\Database\MySQLi($name, $config);
 
         $this->assertEquals(null, $db->connect());
     }

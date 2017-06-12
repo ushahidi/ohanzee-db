@@ -1,9 +1,11 @@
 <?php
 
+namespace Tests;
+
 use Ohanzee\DB;
 use Ohanzee\Database;
 
-class DBTest extends PHPUnit_Framework_TestCase
+class DBTest extends \PHPUnit_Framework_TestCase
 {
     public function providerFactoryQuery()
     {
