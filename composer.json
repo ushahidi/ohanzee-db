@@ -32,7 +32,6 @@
         "irc":      "irc://irc.freenode.net/kohana"
     },
     "require": {
-        "kohana/core":         ">=3.3",
         "php":                 ">=5.4"
     },
     "require-dev": {
