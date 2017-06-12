@@ -48,5 +48,8 @@
         "psr-4": {
             "Ohanzee\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
