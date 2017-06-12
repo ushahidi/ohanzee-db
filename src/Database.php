@@ -61,8 +61,7 @@ abstract class Database {
 		{
 			if ($config === NULL)
 			{
-				// Load the configuration for this database
-				$config = Kohana::$config->load('database')->$name;
+				throw new Database\Exception('Database config array must be passed to instance()');
 			}
 
 			if ( ! isset($config['type']))
@@ -72,7 +71,7 @@ abstract class Database {
 			}
 
 			// Set the driver class name
-			$driver = 'Database_'.ucfirst($config['type']);
+			$driver = 'Ohanzee\\Database\\'.ucfirst($config['type']);
 
 			// Create the database connection instance
 			$driver = new $driver($name, $config);
