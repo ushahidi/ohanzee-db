@@ -67,7 +67,7 @@ abstract class Database {
 
 			if ( ! isset($config['type']))
 			{
-				throw new Kohana_Exception('Database type not defined in :name configuration',
+				throw new Database\Exception('Database type not defined in :name configuration',
 					array(':name' => $name));
 			}
 

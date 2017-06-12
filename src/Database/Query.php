@@ -10,6 +10,9 @@
  */
 namespace Ohanzee\Database;
 
+use Ohanzee\Database;
+use Ohanzee\Database\Exception as DatabaseException;
+
 class Query {
 
 	// Query type
@@ -60,7 +63,7 @@ class Query {
 		}
 		catch (Exception $e)
 		{
-			return Kohana_Exception::text($e);
+			return DatabaseException::text($e);
 		}
 	}
 

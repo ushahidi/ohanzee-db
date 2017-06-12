@@ -36,7 +36,7 @@ class MysqliTest extends PHPUnit_Framework_TestCase
      */
     public function testCanConnect($name, $config)
     {
-        $db = new Database_MySQLi($name, $config);
+        $db = new Database\MySQLi($name, $config);
 
         $this->assertEquals(null, $db->connect());
     }

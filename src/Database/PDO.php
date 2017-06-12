@@ -8,7 +8,13 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_PDO extends Database {
+namespace Ohanzee\Database;
+
+use Ohanzee\Database;
+use Ohanzee\Database\Exception as DatabaseException;
+use PDO as NativePDO;
+
+class PDO extends Database {
 
 	// PDO uses no quoting for identifiers
 	protected $_identifier = '';
@@ -41,22 +47,22 @@ class Database_PDO extends Database {
 		unset($this->_config['connection']);
 
 		// Force PDO to use exceptions for all errors
-		$options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+		$options[NativePDO::ATTR_ERRMODE] = NativePDO::ERRMODE_EXCEPTION;
 
 		if ( ! empty($persistent))
 		{
 			// Make the connection persistent
-			$options[PDO::ATTR_PERSISTENT] = TRUE;
+			$options[NativePDO::ATTR_PERSISTENT] = TRUE;
 		}
 
 		try
 		{
 			// Create a new PDO connection
-			$this->_connection = new PDO($dsn, $username, $password, $options);
+			$this->_connection = new NativePDO($dsn, $username, $password, $options);
 		}
-		catch (PDOException $e)
+		catch (\PDOException $e)
 		{
-			throw new Database_Exception(':error',
+			throw new DatabaseException(':error',
 				array(':error' => $e->getMessage()),
 				$e->getCode());
 		}
@@ -175,15 +181,15 @@ class Database_PDO extends Database {
 			// Convert the result into an array, as PDOStatement::rowCount is not reliable
 			if ($as_object === FALSE)
 			{
-				$result->setFetchMode(PDO::FETCH_ASSOC);
+				$result->setFetchMode(NativePDO::FETCH_ASSOC);
 			}
 			elseif (is_string($as_object))
 			{
-				$result->setFetchMode(PDO::FETCH_CLASS, $as_object, $params);
+				$result->setFetchMode(NativePDO::FETCH_CLASS, $as_object, $params);
 			}
 			else
 			{
-				$result->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
+				$result->setFetchMode(NativePDO::FETCH_CLASS, 'stdClass');
 			}
 
 			$result = $result->fetchAll();
@@ -232,13 +238,13 @@ class Database_PDO extends Database {
 
 	public function list_tables($like = NULL)
 	{
-		throw new Kohana_Exception('Database method :method is not supported by :class',
+		throw new DatabaseException('Database method :method is not supported by :class',
 			array(':method' => __FUNCTION__, ':class' => __CLASS__));
 	}
 
 	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
 	{
-		throw new Kohana_Exception('Database method :method is not supported by :class',
+		throw new DatabaseException('Database method :method is not supported by :class',
 			array(':method' => __FUNCTION__, ':class' => __CLASS__));
 	}
 

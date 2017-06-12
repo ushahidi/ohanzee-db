@@ -86,7 +86,7 @@ class Insert extends Builder {
 	{
 		if ( ! is_array($this->_values))
 		{
-			throw new Kohana_Exception('INSERT INTO ... SELECT statements cannot be combined with INSERT INTO ... VALUES');
+			throw new \Exception('INSERT INTO ... SELECT statements cannot be combined with INSERT INTO ... VALUES');
 		}
 
 		// Get all of the passed values
@@ -107,7 +107,7 @@ class Insert extends Builder {
 	{
 		if ($query->type() !== Database::SELECT)
 		{
-			throw new Kohana_Exception('Only SELECT queries can be combined with INSERT queries');
+			throw new \Exception('Only SELECT queries can be combined with INSERT queries');
 		}
 
 		$this->_values = $query;

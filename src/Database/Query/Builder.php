@@ -11,6 +11,7 @@
 namespace Ohanzee\Database\Query;
 
 use Ohanzee\Database\Query;
+use Ohanzee\Database;
 
 abstract class Builder extends Query {
 

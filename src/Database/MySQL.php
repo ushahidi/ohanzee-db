@@ -8,7 +8,12 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_MySQL extends Database {
+namespace Ohanzee\Database;
+
+use Ohanzee\Database;
+use Ohanzee\Database\Exception as DatabaseException;
+
+class MySQL extends Database {
 
 	// Database in use by each connection
 	protected static $_current_databases = array();
@@ -27,11 +32,11 @@ class Database_MySQL extends Database {
 		if ($this->_connection)
 			return;
 
-		if (Database_MySQL::$_set_names === NULL)
+		if (static::$_set_names === NULL)
 		{
 			// Determine if we can use mysql_set_charset(), which is only
 			// available on PHP 5.2.3+ when compiled against MySQL 5.0+
-			Database_MySQL::$_set_names = ! function_exists('mysql_set_charset');
+			static::$_set_names = ! function_exists('mysql_set_charset');
 		}
 
 		// Extract the connection parameters, adding required variabels
@@ -64,7 +69,7 @@ class Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new Database_Exception(':error',
+			throw new DatabaseException(':error',
 				array(':error' => $e->getMessage()),
 				$e->getCode());
 		}
@@ -105,12 +110,12 @@ class Database_MySQL extends Database {
 		if ( ! mysql_select_db($database, $this->_connection))
 		{
 			// Unable to select database
-			throw new Database_Exception(':error',
+			throw new DatabaseException(':error',
 				array(':error' => mysql_error($this->_connection)),
 				mysql_errno($this->_connection));
 		}
 
-		Database_MySQL::$_current_databases[$this->_connection_id] = $database;
+		static::$_current_databases[$this->_connection_id] = $database;
 	}
 
 	public function disconnect()
@@ -146,7 +151,7 @@ class Database_MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (Database_MySQL::$_set_names === TRUE)
+		if (static::$_set_names === TRUE)
 		{
 			// PHP is compiled against MySQL 4.x
 			$status = (bool) mysql_query('SET NAMES '.$this->quote($charset), $this->_connection);
@@ -159,7 +164,7 @@ class Database_MySQL extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new Database_Exception(':error',
+			throw new DatabaseException(':error',
 				array(':error' => mysql_error($this->_connection)),
 				mysql_errno($this->_connection));
 		}
@@ -176,7 +181,7 @@ class Database_MySQL extends Database {
 			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
 		}
 
-		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== Database_MySQL::$_current_databases[$this->_connection_id])
+		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== static::$_current_databases[$this->_connection_id])
 		{
 			// Select database on persistent connections
 			$this->_select_db($this->_config['connection']['database']);
@@ -191,7 +196,7 @@ class Database_MySQL extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			throw new Database_Exception(':error [ :query ]',
+			throw new DatabaseException(':error [ :query ]',
 				array(':error' => mysql_error($this->_connection), ':query' => $sql),
 				mysql_errno($this->_connection));
 		}
@@ -207,7 +212,7 @@ class Database_MySQL extends Database {
 		if ($type === Database::SELECT)
 		{
 			// Return an iterator of results
-			return new Database_MySQL_Result($result, $sql, $as_object, $params);
+			return new MySQL\Result($result, $sql, $as_object, $params);
 		}
 		elseif ($type === Database::INSERT)
 		{
@@ -287,7 +292,7 @@ class Database_MySQL extends Database {
 
 		if ($mode AND ! mysql_query("SET TRANSACTION ISOLATION LEVEL $mode", $this->_connection))
 		{
-			throw new Database_Exception(':error',
+			throw new DatabaseException(':error',
 				array(':error' => mysql_error($this->_connection)),
 				mysql_errno($this->_connection));
 		}
@@ -432,7 +437,7 @@ class Database_MySQL extends Database {
 
 		if (($value = mysql_real_escape_string( (string) $value, $this->_connection)) === FALSE)
 		{
-			throw new Database_Exception(':error',
+			throw new DatabaseException(':error',
 				array(':error' => mysql_error($this->_connection)),
 				mysql_errno($this->_connection));
 		}

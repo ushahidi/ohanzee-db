@@ -59,7 +59,7 @@ class Join extends Builder {
 	{
 		if ( ! empty($this->_using))
 		{
-			throw new Kohana_Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new \Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		$this->_on[] = array($c1, $op, $c2);
@@ -77,7 +77,7 @@ class Join extends Builder {
 	{
 		if ( ! empty($this->_on))
 		{
-			throw new Kohana_Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new \Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		$columns = func_get_args();
