@@ -248,7 +248,7 @@ class Query {
 				AND ! $this->_force_execute)
 			{
 				// Return a cached result
-				return new Database_Result_Cached($result, $sql, $as_object, $object_params);
+				return new Result\Cached($result, $sql, $as_object, $object_params);
 			}
 		}
 

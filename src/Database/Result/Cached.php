@@ -8,7 +8,12 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_Result_Cached extends Database_Result {
+
+namespace Ohanzee\Database\Result;
+
+use Ohanzee\Database\Result;
+
+class Cached extends Result {
 
 	public function __construct(array $result, $sql, $as_object = NULL)
 	{
