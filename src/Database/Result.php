@@ -8,7 +8,9 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-abstract class Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess {
+namespace Ohanzee\Database;
+
+abstract class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 	// Executed SQL for this result
 	protected $_query;
@@ -76,7 +78,7 @@ abstract class Database_Result implements Countable, Iterator, SeekableIterator,
 	 */
 	public function cached()
 	{
-		return new Database_Result_Cached($this->as_array(), $this->_query, $this->_as_object);
+		return new Result\Cached($this->as_array(), $this->_query, $this->_as_object);
 	}
 
 	/**
