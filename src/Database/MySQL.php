@@ -175,11 +175,11 @@ class MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (Kohana::$profiling)
-		{
-			// Benchmark this query for the current instance
-			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
-		}
+		// if (Kohana::$profiling)
+		// {
+		// 	// Benchmark this query for the current instance
+		// 	$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
+		// }
 
 		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== static::$_current_databases[$this->_connection_id])
 		{

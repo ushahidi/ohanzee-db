@@ -144,11 +144,11 @@ class MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (Kohana::$profiling)
-		{
-			// Benchmark this query for the current instance
-			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
-		}
+		// if (Kohana::$profiling)
+		// {
+		// 	// Benchmark this query for the current instance
+		// 	$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
+		// }
 
 		// Execute the query
 		if (($result = $this->_connection->query($sql)) === FALSE)
