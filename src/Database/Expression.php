@@ -9,14 +9,18 @@
  *     $query = DB::select(array(DB::expr('CONCAT(first_name, last_name)'), 'full_name')));
  *
  * More examples are available on the [Query Builder](database/query/builder#database-expressions) page
- * 
+ *
  * @package    Ohanzee/Database
  * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_Expression {
+namespace Ohanzee\Database;
+
+use Ohanzee\Database;
+
+class Expression {
 
 	// Unquoted parameters
 	protected $_parameters;

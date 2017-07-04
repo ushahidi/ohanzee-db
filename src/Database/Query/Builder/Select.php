@@ -8,7 +8,12 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_Query_Builder_Select extends Database_Query_Builder_Where {
+namespace Ohanzee\Database\Query\Builder;
+
+use Ohanzee\Database;
+use Ohanzee\Database\Query\Builder\Where;
+
+class Select extends Where {
 
 	// SELECT ...
 	protected $_select = array();
@@ -120,7 +125,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	 */
 	public function join($table, $type = NULL)
 	{
-		$this->_join[] = $this->_last_join = new Database_Query_Builder_Join($table, $type);
+		$this->_join[] = $this->_last_join = new Join($table, $type);
 
 		return $this;
 	}
@@ -295,8 +300,8 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 		{
 			$select = DB::select()->from($select);
 		}
-		if ( ! $select instanceof Database_Query_Builder_Select)
-			throw new Kohana_Exception('first parameter must be a string or an instance of Database_Query_Builder_Select');
+		if ( ! $select instanceof Select)
+			throw new \Exception('first parameter must be a string or an instance of Ohanzee\Database\Query\Builder\Select');
 		$this->_union []= array('select' => $select, 'all' => $all);
 		return $this;
 	}
@@ -442,11 +447,11 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 
 		return $this;
 	}
-	
+
 	public function resetSelect()
 	{
 		$this->_select = array();
-		
+
 		return $this;
 	}
 

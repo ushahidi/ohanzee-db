@@ -14,6 +14,8 @@
  * @copyright  (c) 2014 Ohanzee Contributors
  * @license    http://kohanaphp.com/license
  */
+namespace Ohanzee;
+
 abstract class Database {
 
 	// Query types
@@ -52,34 +54,33 @@ abstract class Database {
 		if ($name === NULL)
 		{
 			// Use the default instance name
-			$name = Database::$default;
+			$name = static::$default;
 		}
 
-		if ( ! isset(Database::$instances[$name]))
+		if ( ! isset(static::$instances[$name]))
 		{
 			if ($config === NULL)
 			{
-				// Load the configuration for this database
-				$config = Kohana::$config->load('database')->$name;
+				throw new Database\Exception('Database config array must be passed to instance()');
 			}
 
 			if ( ! isset($config['type']))
 			{
-				throw new Kohana_Exception('Database type not defined in :name configuration',
+				throw new Database\Exception('Database type not defined in :name configuration',
 					array(':name' => $name));
 			}
 
 			// Set the driver class name
-			$driver = 'Database_'.ucfirst($config['type']);
+			$driver = 'Ohanzee\\Database\\'.ucfirst($config['type']);
 
 			// Create the database connection instance
 			$driver = new $driver($name, $config);
 
 			// Store the database instance
-			Database::$instances[$name] = $driver;
+			static::$instances[$name] = $driver;
 		}
 
-		return Database::$instances[$name];
+		return static::$instances[$name];
 	}
 
 	/**
@@ -169,7 +170,7 @@ abstract class Database {
 	 */
 	public function disconnect()
 	{
-		unset(Database::$instances[$this->_instance]);
+		unset(static::$instances[$this->_instance]);
 
 		return TRUE;
 	}
@@ -261,7 +262,7 @@ abstract class Database {
 		// Quote the table name
 		$table = $this->quote_table($table);
 
-		return $this->query(Database::SELECT, 'SELECT COUNT(*) AS total_row_count FROM '.$table, FALSE)
+		return $this->query(static::SELECT, 'SELECT COUNT(*) AS total_row_count FROM '.$table, FALSE)
 			->get('total_row_count');
 	}
 
@@ -443,12 +444,12 @@ abstract class Database {
 		}
 		elseif (is_object($value))
 		{
-			if ($value instanceof Database_Query)
+			if ($value instanceof Database\Query)
 			{
 				// Create a sub-query
 				return '('.$value->compile($this).')';
 			}
-			elseif ($value instanceof Database_Expression)
+			elseif ($value instanceof Database\Expression)
 			{
 				// Compile the expression
 				return $value->compile($this);
@@ -486,8 +487,8 @@ abstract class Database {
 	 *     $column = $db->quote_column(DB::expr('COUNT(`column`)'));
 	 *
 	 * Objects passed to this function will be converted to strings.
-	 * [Database_Expression] objects will be compiled.
-	 * [Database_Query] objects will be compiled and converted to a sub-query.
+	 * [Database\Expression] objects will be compiled.
+	 * [Database\Query] objects will be compiled and converted to a sub-query.
 	 * All other objects will be converted using the `__toString` method.
 	 *
 	 * @param   mixed   $column  column name or array(column, alias)
@@ -506,12 +507,12 @@ abstract class Database {
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($column instanceof Database_Query)
+		if ($column instanceof Database\Query)
 		{
 			// Create a sub-query
 			$column = '('.$column->compile($this).')';
 		}
-		elseif ($column instanceof Database_Expression)
+		elseif ($column instanceof Database\Expression)
 		{
 			// Compile the expression
 			$column = $column->compile($this);
@@ -571,8 +572,8 @@ abstract class Database {
 	 *     $table = $db->quote_table($table);
 	 *
 	 * Objects passed to this function will be converted to strings.
-	 * [Database_Expression] objects will be compiled.
-	 * [Database_Query] objects will be compiled and converted to a sub-query.
+	 * [Database\Expression] objects will be compiled.
+	 * [Database\Query] objects will be compiled and converted to a sub-query.
 	 * All other objects will be converted using the `__toString` method.
 	 *
 	 * @param   mixed   $table  table name or array(table, alias)
@@ -591,12 +592,12 @@ abstract class Database {
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($table instanceof Database_Query)
+		if ($table instanceof Database\Query)
 		{
 			// Create a sub-query
 			$table = '('.$table->compile($this).')';
 		}
-		elseif ($table instanceof Database_Expression)
+		elseif ($table instanceof Database\Expression)
 		{
 			// Compile the expression
 			$table = $table->compile($this);
@@ -649,8 +650,8 @@ abstract class Database {
 	 * Quote a database identifier
 	 *
 	 * Objects passed to this function will be converted to strings.
-	 * [Database_Expression] objects will be compiled.
-	 * [Database_Query] objects will be compiled and converted to a sub-query.
+	 * [Database\Expression] objects will be compiled.
+	 * [Database\Query] objects will be compiled and converted to a sub-query.
 	 * All other objects will be converted using the `__toString` method.
 	 *
 	 * @param   mixed   $value  any identifier
@@ -667,12 +668,12 @@ abstract class Database {
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($value instanceof Database_Query)
+		if ($value instanceof Database\Query)
 		{
 			// Create a sub-query
 			$value = '('.$value->compile($this).')';
 		}
-		elseif ($value instanceof Database_Expression)
+		elseif ($value instanceof Database\Expression)
 		{
 			// Compile the expression
 			$value = $value->compile($this);

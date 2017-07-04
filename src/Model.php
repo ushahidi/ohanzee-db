@@ -8,7 +8,9 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://kohanaframework.org/license
  */
-abstract class Model_Database extends Model {
+namespace Ohanzee;
+
+abstract class Model {
 
 	/**
 	 * Create a new model instance. A [Database] instance or configuration

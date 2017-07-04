@@ -9,7 +9,13 @@
  * @copyright  (c) 2014 Ohanzee Contributors
  * @license    http://kohanaphp.com/license
  */
-class Database_MySQLi extends Database {
+namespace Ohanzee\Database;
+
+use Ohanzee\Database;
+use Ohanzee\Database\Exception as DatabaseException;
+use mysqli as NativeMySQLi;
+
+class MySQLi extends Database {
 
 	// Database in use by each connection
 	protected static $_current_databases = array();
@@ -28,11 +34,11 @@ class Database_MySQLi extends Database {
 		if ($this->_connection)
 			return;
 
-		if (Database_MySQLi::$_set_names === NULL)
+		if (static::$_set_names === NULL)
 		{
 			// Determine if we can use mysqli_set_charset(), which is only
 			// available on PHP 5.2.3+ when compiled against MySQL 5.0+
-			Database_MySQLi::$_set_names = ! function_exists('mysqli_set_charset');
+			static::$_set_names = ! function_exists('mysqli_set_charset');
 		}
 
 		// Extract the connection parameters, adding required variabels
@@ -50,14 +56,14 @@ class Database_MySQLi extends Database {
 
 		try
 		{
-			$this->_connection = new mysqli($hostname, $username, $password, $database, $port, $socket);
+			$this->_connection = new NativeMySQLi($hostname, $username, $password, $database, $port, $socket);
 		}
 		catch (Exception $e)
 		{
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new Database_Exception(':error', array(':error' => $e->getMessage()), $e->getCode());
+			throw new DatabaseException(':error', array(':error' => $e->getMessage()), $e->getCode());
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
@@ -116,7 +122,7 @@ class Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (Database_MySQLi::$_set_names === TRUE)
+		if (static::$_set_names === TRUE)
 		{
 			// PHP is compiled against MySQL 4.x
 			$status = (bool) $this->_connection->query('SET NAMES '.$this->quote($charset));
@@ -129,7 +135,7 @@ class Database_MySQLi extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new Database_Exception(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new DatabaseException(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
 		}
 	}
 
@@ -138,11 +144,11 @@ class Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (Kohana::$profiling)
-		{
-			// Benchmark this query for the current instance
-			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
-		}
+		// if (Kohana::$profiling)
+		// {
+		// 	// Benchmark this query for the current instance
+		// 	$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
+		// }
 
 		// Execute the query
 		if (($result = $this->_connection->query($sql)) === FALSE)
@@ -153,7 +159,7 @@ class Database_MySQLi extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			throw new Database_Exception(':error [ :query ]', array(
+			throw new DatabaseException(':error [ :query ]', array(
 				':error' => $this->_connection->error,
 				':query' => $sql
 			), $this->_connection->errno);
@@ -170,7 +176,7 @@ class Database_MySQLi extends Database {
 		if ($type === Database::SELECT)
 		{
 			// Return an iterator of results
-			return new Database_MySQLi_Result($result, $sql, $as_object, $params);
+			return new MySQLi\Result($result, $sql, $as_object, $params);
 		}
 		elseif ($type === Database::INSERT)
 		{
@@ -250,7 +256,7 @@ class Database_MySQLi extends Database {
 
 		if ($mode AND ! $this->_connection->query("SET TRANSACTION ISOLATION LEVEL $mode"))
 		{
-			throw new Database_Exception(':error', array(
+			throw new DatabaseException(':error', array(
 				':error' => $this->_connection->error
 			), $this->_connection->errno);
 		}
@@ -395,7 +401,7 @@ class Database_MySQLi extends Database {
 
 		if (($value = $this->_connection->real_escape_string( (string) $value)) === FALSE)
 		{
-			throw new Database_Exception(':error', array(
+			throw new DatabaseException(':error', array(
 				':error' => $this->_connection->error,
 			), $this->_connection->errno);
 		}
